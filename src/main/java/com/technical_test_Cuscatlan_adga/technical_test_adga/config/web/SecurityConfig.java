@@ -11,8 +11,11 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(authz -> authz
+        http
+                .csrf(csrf -> csrf.disable())
+                .headers(headers -> headers.frameOptions().disable()) // ⬅️ esto permite H2
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/h2-console/**").permitAll() // ⬅️ permite el acceso
                         .anyRequest().permitAll()
                 );
         return http.build();
