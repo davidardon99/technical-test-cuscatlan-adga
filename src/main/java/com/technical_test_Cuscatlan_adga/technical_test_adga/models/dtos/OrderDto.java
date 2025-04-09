@@ -1,6 +1,7 @@
 package com.technical_test_Cuscatlan_adga.technical_test_adga.models.dtos;
 
 import com.technical_test_Cuscatlan_adga.technical_test_adga.models.enums.OrderStatus;
+import com.technical_test_Cuscatlan_adga.technical_test_adga.models.enums.Status;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -32,6 +33,10 @@ public class OrderDto {
     private Double totalAmount;
 
     private OrderStatus status;
+    private Boolean active;
+    private Status orderStatus;
 
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
 }

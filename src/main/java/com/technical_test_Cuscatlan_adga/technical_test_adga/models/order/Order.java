@@ -2,6 +2,7 @@ package com.technical_test_Cuscatlan_adga.technical_test_adga.models.order;
 
 import com.technical_test_Cuscatlan_adga.technical_test_adga.models.client.Client;
 import com.technical_test_Cuscatlan_adga.technical_test_adga.models.enums.OrderStatus;
+import com.technical_test_Cuscatlan_adga.technical_test_adga.models.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +36,14 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
+    @Column(nullable = false)
+    private Boolean active = true;
+
+    @Enumerated(EnumType.STRING)
+    private Status orderStatus;
+
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
 
 

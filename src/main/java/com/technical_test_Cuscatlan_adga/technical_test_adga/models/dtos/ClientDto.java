@@ -1,5 +1,7 @@
 package com.technical_test_Cuscatlan_adga.technical_test_adga.models.dtos;
 
+import com.technical_test_Cuscatlan_adga.technical_test_adga.models.enums.GenderType;
+import com.technical_test_Cuscatlan_adga.technical_test_adga.models.enums.Status;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -38,4 +41,9 @@ public class ClientDto {
 
     @NotNull(message = "Active status is required")
     private Boolean active;
+
+    private Status clientStatus;
+    private GenderType gender;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

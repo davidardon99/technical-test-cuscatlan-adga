@@ -1,13 +1,14 @@
 package com.technical_test_Cuscatlan_adga.technical_test_adga.models.client;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.technical_test_Cuscatlan_adga.technical_test_adga.models.enums.GenderType;
+import com.technical_test_Cuscatlan_adga.technical_test_adga.models.enums.Status;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -27,5 +28,16 @@ public class Client {
     private Date birthday;
     private Integer phoneNumber;
     private String email;
-    private Boolean active;
+
+    @Column(nullable = false)
+    private Boolean active = true;
+
+    @Enumerated(EnumType.STRING)
+    private Status clientStatus;
+
+    @Enumerated(EnumType.STRING)
+    private GenderType gender;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
