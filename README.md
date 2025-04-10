@@ -244,9 +244,3 @@ POST http://localhost:8080/api/payments/v1/process-order-payment/{orderId}
 ```
 
 ---
-
-## ✅ Status
-
-All required and optional sections of the technical test are **fully implemented**, tested and documented.
-
-You're ready to impress 😎🚀
