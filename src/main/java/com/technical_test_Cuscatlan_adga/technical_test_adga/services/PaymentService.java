@@ -23,7 +23,7 @@ public class PaymentService {
     public PaymentWrapperResponse processPayment(UUID orderId) {
         ResponseAdvisor advisor = new ResponseAdvisor(200, "SUCCESS");
 
-        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        Optional<Order> optionalOrder = orderRepository.findActiveById(orderId);
 
         if (optionalOrder.isEmpty()) {
             advisor.setErrorCode(404);

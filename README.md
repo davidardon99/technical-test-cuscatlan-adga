@@ -1,191 +1,187 @@
 # 🛒 Technical Test - Cuscatlan - adga
 
-This project is a microservices-based solution using **Java** and **Spring Boot**, simulating a **shopping cart system** with external product API integration.
+This project is a microservices-based solution using Java and Spring Boot, simulating a shopping cart system with external product API integration.
+
+---
 
 ## 🧩 General Architecture
-
 The system includes the following modules:
 
-### 🔹 Products (External API)
-- Acts as a proxy to: `https://fakestoreapi.com`
-- Available endpoints:
-    - `GET /api/products/v1/get-all-products`
-    - `GET /api/products/v1/find-product-by-id/{id}`
-
-### 🔹 Orders
-- Create, update, retrieve, and delete (soft delete).
-- Full integration with Client and Order Details.
-
-### 🔹 Payments (Simulated)
-- Endpoints simulate payment statuses: `APPROVED`, `DECLINED`, `PENDING`
-
----
-## 📌 Diagram
-
-![Diagram](./diagram.png)
+- ✅ Product Microservice (proxy to https://fakestoreapi.com).
+- ✅ Order Management (Create, Update, findById,  Delete).
+- ✅ Payment Simulation Endpoint.
+- ✅ Entities and DTOs: `Client`, `Order`, `OrderDetail`.
+- ✅ Delete logic for all entities using `active = false`.
+- ✅ Enum fields for `Status`, `OrderStatus`, `PaymentStatus`, `Gender`.
+- ✅ `createdAt` and `updatedAt` timestamps for all entities.
+- ✅ Security, Authentication and Authorization using JWT.
 
 ---
 
+## 📌  Process Diagram
+![technical_test_Cuscatlan_adga.jpg](technical_test_Cuscatlan_adga.jpg)
 
-## 📦 Main Entities
-
-### `Client`
-```java
-UUID id;
-String name;
-String lastName;
-String identificationNumber;
-Date birthday;
-Integer phoneNumber;
-String email;
-Gender gender;
-Boolean active;
-Status clientStatus;
-LocalDateTime createdAt;
-LocalDateTime updatedAt;
-```
-
-### `Order`
-```java
-UUID id;
-Client client;
-List<OrderDetail> orderDetails;
-Double totalAmount;
-OrderStatus status;
-Boolean active;
-Status orderStatus;
-LocalDateTime createdAt;
-LocalDateTime updatedAt;
-```
-
-### `OrderDetail`
-```java
-UUID id;
-Long productoId;
-Integer amount;
-Double unitPrice;
-Order order;
-Boolean active;
-Status orderDetailStatus;
-LocalDateTime createdAt;
-LocalDateTime updatedAt;
-```
-
-### `Enum Gender`
-```java
-MALE, FEMALE, OTHER
-```
-
-### `Enum Status`
-```java
-CREATED, UPDATED, DELETED
-```
-
-### `Enum OrderStatus`
-```java
-CREATED, PAID, CANCELLED
-```
+---
 
 ## 📁 Project Structure
 
-```bash
+```
 src/main/java/com/technical_test_Cuscatlan_adga/technical_test_adga
-│
-├── models
-│   ├── Product.java
-│   ├── ProductRating.java
-│   ├── Client.java (@Entity)
-│   ├── Order.java (@Entity)
-│   ├── OrderDetail.java (@Entity)
-│   └── enums: OrderStatus.java, PaymentStatus.java, Status.java, Gender.java
-│
-├── dtos
-│   ├── ClientDTO.java
-│   ├── OrderDTO.java
-│   ├── OrderDetailDTO.java
-│
-├── wrappers
-│   ├── ProductWrapperResponse.java
-│   ├── ProductsListWrapperResponse.java
-│   ├── PaymentWrapperResponse.java
-│   └── OrderWrapperResponse.java
-│
-├── advisors
-│   └── ResponseAdvisor.java
-│
-├── config
-│   ├── WebClientConfig.java
-│   └── SecurityConfig.java
-│
-├── services
-│   ├── ProductService.java
-│   ├── OrderService.java
-│   └── PaymentService.java
-│
-├── repositories
-│   ├── ClientRepository.java
-│   ├── OrderRepository.java
-│   └── OrderDetailRepository.java
-│
-└── controllers
-    ├── ProductController.java
-    ├── OrderController.java
-    └── PaymentController.java
+|
+|-- models
+|   |-- Product.java
+|   |-- ProductRating.java
+|   |-- Client.java (@Entity)
+|   |-- Order.java (@Entity)
+|   |-- OrderDetail.java (@Entity)
+|   |-- enums: OrderStatus.java, PaymentStatus.java, Gender.java, Status.java, RoleType.java
+|
+|-- dtos
+|   |-- ClientDTO.java
+|   |-- OrderDTO.java
+|   |-- OrderDetailDTO.java
+|   |-- auth: AuthRequest.java, AuthResponse.java, RegisterRequest.java
+|
+|-- wrappers
+|   |-- ProductWrapperResponse.java
+|   |-- ProductsListWrapperResponse.java
+|   |-- PaymentWrapperResponse.java
+|   |-- OrderWrapperResponse.java
+|   |-- OrderListWrapperResponse.java
+|
+|-- advisors
+|   |-- ResponseAdvisor.java
+|
+|-- config
+|   |-- WebClientConfig.java
+|   |-- SecurityConfig.java
+|   |-- SecurityBeansConfig.java
+|
+|-- services
+|   |-- ProductService.java
+|   |-- OrderService.java
+|   |-- PaymentService.java
+|   |-- JwtService.java
+|   |-- AuthenticationService.java
+|   |-- CustomUserDetailsService.java
+|
+|-- repositories
+|   |-- ClientRepository.java
+|   |-- OrderRepository.java
+|   |-- OrderDetailRepository.java
+|   |-- UserRepository.java
+|
+|-- controllers
+|   |-- ProductController.java
+|   |-- OrderController.java
+|   |-- PaymentController.java
+|   |-- AuthController.java
+|
+|-- security
+|   |-- User.java
+|   |-- JwtAuthenticationFilter.java
+|   |-- UserPrincipal.java
+|   |-- UserDetailsServiceImpl.java
 ```
 
-## 🔐 Security
-- Disabled for development (using `permitAll()` in `SecurityConfig`).
+---
 
-## 🧪 Database (H2)
-- Uses H2 in-memory database.
-- H2 Console: `http://localhost:8080/h2-console`
-- JDBC URL: `jdbc:h2:mem:testdb`
+## 🚀 API Endpoints
 
-## ✅ Available Endpoints
+### 🛒 Products Controller - `/api/products/v1`
 
-### 📦 Products
-- `GET /api/products/v1/get-all-products`
-- `GET /api/products/v1/find-product-by-id/{id}`
+| Method | Endpoint                             | Description                    |
+|--------|--------------------------------------|--------------------------------|
+| GET    | `/get-all-products`                  | Returns all products           |
+| GET    | `/find-product-by-id/{id}`           | Returns product by ID          |
 
-### 📑 Orders
-- `POST /api/orders/v1/create-order`
-- `PUT /api/orders/v1/update-order-by-id/{id}`
-- `GET /api/orders/v1/get-order-by-id/{id}`
-- `GET /api/orders/v1/get-all-orders`
-- `DELETE /api/orders/v1/delete-order-by-id/{id}`
+### 📦 Orders Controller - `/api/orders/v1`
 
-### 💳 Payments
-- `POST /api/payments/v1/process-order-payment/{orderId}`
+| Method | Endpoint                                      | Description                     |
+|--------|-----------------------------------------------|---------------------------------|
+| POST   | `/create-order`                               | Create a new order              |
+| PUT    | `/update-order-by-id/{id}`                    | Update an existing order        |
+| DELETE | `/delete-order-by-id/{id}`                    | Soft-delete an order            |
+| GET    | `/get-all-orders`                             | List all active orders          |
+| GET    | `/find-order-by-id/{id}`                      | Get specific order by ID        |
 
-## 🔄 Delete Order
-- All entities (`Order`, `OrderDetail`, `Client`) implement soft delete using `Boolean active`.
-- All find operations only return active records.
-- Deletion sets `active = false` and `status = DELETED`.
+### 💳 Payments Controller - `/api/payments/v1`
 
+| Method | Endpoint                                      | Description                     |
+|--------|-----------------------------------------------|---------------------------------|
+| POST   | `/process-order-payment/{orderId}`            | Simulate a payment for an order |
 
-## 🔮 Response Format
+### 🔐 Authentication Controller - `/api/auth/v1`
+
+| Method | Endpoint         | Description             |
+|--------|------------------|-------------------------|
+| POST   | `/register`      | Register new user       |
+| POST   | `/login`         | Authenticate and get JWT|
+
+---
+
+---
+ ### 🔮 Response Format
 -All APIs return a standard structure with:
-```json
+ResponseAdvisor
+
+    {
+      "<result>": {...},
+      "responseAdvisor": {
+      "errorCode": 200,
+      "statusError": "SUCCESS",
+      "errorMessages": ["message"]
+      }
+    }
+
+
+---
+
+## 🧪 Postman Example Collection
+
+### ✅ Authentication (Login / Register)
+1. **Register:**
+```
+POST http://localhost:8080/api/auth/v1/register
+Body (JSON):
 {
-  "<result>": {...},
-  "responseAdvisor": {
-    "errorCode": 200,
-    "statusError": "SUCCESS",
-    "errorMessages": ["message"]
-  }
+  "username": "admin",
+  "password": "admin123",
+  "role": "ADMIN"
 }
 ```
+2. **Login:**
+```
+POST http://localhost:8080/api/auth/v1/login
+Body (JSON):
+{
+  "username": "admin",
+  "password": "admin123"
+}
+Response:
+{
+  "token": "eyJhb..."
+}
+```
+> 🔐 Use this token as Bearer Token in Authorization header for protected routes
 
-## 🧪 You can test endpoints with **Postman** or Swagger UI at:
-### 📄 Swagger:
-- `http://localhost:8080/swagger-ui/index.html`
+### 🛒 Products
+```
+GET http://localhost:8080/api/products/v1/get-all-products
+GET http://localhost:8080/api/products/v1/find-product-by-id/1
+```
 
-### 📄 Post Man:
+### 📦 Orders
+```
+GET http://localhost:8080/api/orders/v1/get-all-orders
+GET http://localhost:8080/api/orders/v1/find-order-by-id/{orderId}
+DELETE http://localhost:8080/api/orders/v1/delete-order-by-id/{orderId}
+```
 
-### Example **Create Order** 
-POST `http://localhost:8080/api/orders/v1/create-order`
-
-```json
+**Create Order**
+```
+POST http://localhost:8080/api/orders/v1/create-order
+Body:
 {
   "client": {
     "id": "d7842f91-81da-4a9a-a18d-6a5c2c1a9770",
@@ -195,7 +191,6 @@ POST `http://localhost:8080/api/orders/v1/create-order`
     "birthday": "1999-08-26",
     "phoneNumber": 33570625,
     "email": "angelgonzalez.nl90@gmail.com",
-    "gender": "MALE",
     "active": true
   },
   "orderDetails": [
@@ -211,24 +206,23 @@ POST `http://localhost:8080/api/orders/v1/create-order`
       "unitPrice": 80.0,
       "active": true
     }
-  ],
-  "active": true
+  ]
 }
 ```
 
-### Example **Update Order**
-PUT `http://localhost:8080/api/orders/v1/update-order-by-id/{id}`:
-```json
+**Update Order**
+```
+PUT http://localhost:8080/api/orders/v1/update-order-by-id/{orderId}
+Body:
 {
   "client": {
-    "id": "9e3fe921-6324-4011-b50c-ac8a988d51ca",
+    "id": "d7842f91-81da-4a9a-a18d-6a5c2c1a9770",
     "name": "David",
     "lastName": "Ardón",
     "identificationNumber": "0801199905137",
     "birthday": "1999-08-26",
     "phoneNumber": 98313233,
     "email": "angelgonzalez.nl90@gmail.com",
-    "gender": "MALE",
     "active": true
   },
   "orderDetails": [
@@ -239,60 +233,20 @@ PUT `http://localhost:8080/api/orders/v1/update-order-by-id/{id}`:
       "active": true
     }
   ],
-  "active": true
+  "active": true,
+  "status": "CREATED"
 }
 ```
 
-### Example **Delete Order**
-DELETE `http://localhost:8080/delete-order-by-id/{id}`
-
-### Example **Get All Orders**
-GET `http://localhost:8080/api/orders/v1/get-all-orders`
-
-### Example **Get Order By Id**
-GET `http://localhost:8080/api/orders/v1/find-order-by-id/{id}`
+### 💳 Payments Order (Simulated)
+```
+POST http://localhost:8080/api/payments/v1/process-order-payment/{orderId}
+```
 
 ---
 
-## 🚀 How to Run the Project
+## ✅ Status
 
-1. Clone the repository
-2. In `application.properties`, configure:
-   ```properties
-   spring.application.name=technical-test-adga
-   application-description=Calling Third Party API in Spring Boot
-   application-version=1.0.0
-   info.app.name=fakestore-api
-   info.app.description=@application-description@
-   info.app.version=@application-version@
+All required and optional sections of the technical test are **fully implemented**, tested and documented.
 
-   server.port=8080
-
-   external.api.products.url=https://fakestoreapi.com
-   management.endpoints.web.exposure.include=*
-   management.endpoint.health.show-details=always
-
-   logging.level.org.springframework.web=DEBUG
-
-   spring.security.enabled=false
-
-   spring.datasource.url=jdbc:h2:mem:testdb
-   spring.datasource.driverClassName=org.h2.Driver
-   spring.datasource.username=sa
-   spring.datasource.password=
-   spring.h2.console.enabled=true
-   spring.h2.console.path=/h2-console
-
-   spring.jpa.hibernate.ddl-auto=update
-   spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
-   ```
-3. Run `TechnicalTestAdgaApplication.java`
-4. Access Swagger and H2 Console
-
----
-
-## 👨‍💻 Author
-**Angel David González Ardón**
-
-Ready for integration and testing! 🚀
-
+You're ready to impress 😎🚀
