@@ -7,13 +7,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderListWrapperResponse {
-    private List<OrderDto> orderDtoList;
+public class OrderDtoWrapperResponse {
+    private OrderDto orderDto;
     private ResponseAdvisor responseAdvisor;
 }

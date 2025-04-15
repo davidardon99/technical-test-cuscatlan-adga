@@ -47,7 +47,9 @@ src/main/java/com/technical_test_Cuscatlan_adga/technical_test_adga
 |   |-- ProductsListWrapperResponse.java
 |   |-- PaymentWrapperResponse.java
 |   |-- OrderWrapperResponse.java
+|   |-- OrderDtoWrapperResponse.java
 |   |-- OrderListWrapperResponse.java
+|   |-- ClientWrapperResponse.java
 |
 |-- advisors
 |   |-- ResponseAdvisor.java
